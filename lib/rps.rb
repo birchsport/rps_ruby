@@ -16,25 +16,24 @@ class RockPaperScissors
       puts "Player score: #{@player_score}, " +
                "Computer score: #{@computer_score}, Ties: #{@ties}"
 
-      @player_piece = player_choice
       @computer_piece = compute_move @player_piece, @computer_piece, @last_status
+      @player_piece = player_choice
       puts "\nPlayer chooses #{@player_piece.to_s}"
       puts "Computer chooses #{@computer_piece.to_s}"
 
-      case player_outcome @computer_piece, @player_piece
+      status = @computer_piece <=> @player_piece
+      case status
       when 1
         puts "#{@player_piece.to_s} beats #{@computer_piece.to_s}, player wins the round"
         @player_score += 1
-        @last_status = -1
       when -1
         puts "#{@computer_piece.to_s} beats #{@player_piece.to_s}, computer wins the round"
         @computer_score += 1
-        @last_status = 1
       else
         puts "Tie, choose again"
         @ties += 1
-        @last_status = 0
       end
+      @last_status = status * -1
     end
     puts "\nFinal score: player: #{@player_score}, " +
              "computer: #{@computer_score} (ties: #{@ties})"
@@ -64,8 +63,4 @@ def player_choice
     return ENTRY_TO_SYM[choice] if ENTRY_TO_SYM.key?(choice)
     puts "That entry is invalid. Please re-enter"
   end
-end
-
-def player_outcome(comp_play, player_play)
-  comp_play <=> player_play
 end
